@@ -1,0 +1,67 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input id="textinput" type="text">
+    <button id="add_btn">Add</button>
+    <ul id="todoList">
+    </ul>
+
+
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var url = 'http://localhost:9081/music';
+        var urls = 'http://shopapp.globits.net:8091/shop/api/employees';
+        var todolist,res;
+        axios.get(url).then(function(result){
+            res=result.data;
+            todolist=result.data.map(function(item){
+                return item.content;
+            })
+            render();
+        })
+      
+        function render(){
+            var list=document.getElementById("todoList");
+            var content=todolist.map(function(item){
+                return "<li>" + item + "</li>";
+            });
+            list.innerHTML=content.join("");
+            console.log(content.join(""));
+            
+        }
+        function addItem(){
+
+            // lấy thẻ input
+            var input=document.getElementById("textinput");
+            // lấy giá trị thẻ input
+            var newitem=input.value;
+            // push vào todolist
+            todolist.push(newitem);
+            // re-render
+            render();
+            input.value="";
+            var tmp,id;
+            id = res.length;
+            tmp = {"id": id+1,"content": newitem };
+            res.push(tmp);
+            console.log(res);
+            axios.post("http://localhost:9081/music",tmp);
+     
+            var abc = {'firstName':'asdasdas','lastName': 'asdada','description':'asdasdqeqwe','birthDate':'2020-03-19'};
+            axios.post(urls,abc);
+           
+
+        }
+        var addBtn=document.getElementById("add_btn");
+        // addBtn.onclick=addItem; 
+        addBtn.addEventListener("click",addItem);
+    </script>
+</body>
+</html>
